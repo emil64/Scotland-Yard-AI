@@ -13,7 +13,7 @@ import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYardView;
 
 // TODO name the AI
-@ManagedAI("")
+@ManagedAI("Name me")
 public class MyAI implements PlayerFactory {
 
 	// TODO create a new player here
