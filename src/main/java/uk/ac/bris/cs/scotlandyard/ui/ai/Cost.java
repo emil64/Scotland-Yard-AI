@@ -31,6 +31,17 @@ public class Cost {
         moves = c.moves;
     }
 
+    public Cost(int taxi, int bus, int underground, int secret, int x2){
+        this.taxi = taxi;
+        this.bus = bus;
+        this.underground = underground;
+        this.secret = secret;
+        this.x2 = x2;
+        moves = 0;
+        ferry = 0;
+        cost = 0;
+    }
+
     public void addTransport(Transport transport){
         if(transport == BUS)
             addBus();
@@ -68,7 +79,7 @@ public class Cost {
     }
 
     public int getCost(){
-        return moves*1000;
+        return moves*1000 + taxi*2 + bus * 3 + underground * 6;
     }
 
     public int getMoves(){

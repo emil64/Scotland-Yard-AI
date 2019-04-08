@@ -1,15 +1,13 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai;
 
-import uk.ac.bris.cs.scotlandyard.model.ScotlandYardView;
-
 public class Score implements ScoreCalculator {
     @Override
-    public int getMrXscore(ScotlandYardView view, int mrXLocation) {
+    public int getMrXscore(ScotMask mask, int mrXLocation) {
         return 0;
     }
 
     @Override
-    public int getDetectiveScore(ScotlandYardView view) {
+    public int getDetectiveScore(ScotMask mask) {
         return 0;
     }
 }
