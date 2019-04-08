@@ -1,8 +1,12 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai;
 
+import uk.ac.bris.cs.scotlandyard.model.Transport;
+
+import static uk.ac.bris.cs.scotlandyard.model.Transport.*;
+
 public class Cost {
 
-    private int taxi, bus, underground, secret, x2;
+    private int taxi, bus, underground, secret, x2, ferry;
     private int cost, moves;
 
     public Cost(){
@@ -11,6 +15,7 @@ public class Cost {
         underground = 0;
         secret = 0;
         x2 = 0;
+        ferry = 0;
         cost = 0;
         moves = 0;
     }
@@ -22,28 +27,71 @@ public class Cost {
         x2 = c.x2;
         secret = c.secret;
         cost = c.cost;
+        ferry = c.ferry;
         moves = c.moves;
     }
 
-    public void addBus(){
+    public void addTransport(Transport transport){
+        if(transport == BUS)
+            addBus();
+        if(transport == TAXI)
+            addTaxi();
+        if(transport == UNDERGROUND)
+            addUnderground();
+        if(transport == FERRY)
+            addFerry();
+    }
+
+    private void addBus(){
         bus++;
         moves++;
     }
-    public void addTaxi(){
+    private void addTaxi(){
         taxi++;
         moves++;
     }
-    public void addUnderground(){
+    private void addUnderground(){
         underground++;
         moves++;
     }
-    public void addSecret(){
+
+    private void addFerry(){
+        ferry++;
+        moves++;
+    }
+    private void addSecret(){
         secret++;
         moves++;
     }
-    public void addX2(){
+    private void addX2(){
         x2++;
     }
 
+    public int getCost(){
+        return moves*1000;
+    }
 
+    public int getMoves(){
+        return moves;
+    }
+
+    public Boolean hasTaxi(int n){
+        return (taxi <= n);
+    }
+    public Boolean hasBus(int n){
+        return (bus <= n);
+    }
+    public Boolean hasUnderground(int n){
+        return (underground <= n);
+    }
+
+    public int getTaxi(){
+        return taxi;
+    }
+    public int getBus(){
+        return bus;
+    }
+    public int getUnderground(){
+        return underground;
+    }
 }
