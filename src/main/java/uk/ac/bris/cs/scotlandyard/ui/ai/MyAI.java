@@ -13,7 +13,7 @@ import uk.ac.bris.cs.scotlandyard.model.Player;
 import uk.ac.bris.cs.scotlandyard.model.ScotlandYardView;
 
 // TODO name the AI
-@ManagedAI("Name me")
+@ManagedAI("Neloo")
 public class MyAI implements PlayerFactory {
 
 	// TODO create a new player here
@@ -35,5 +35,6 @@ public class MyAI implements PlayerFactory {
 			callback.accept(new ArrayList<>(moves).get(random.nextInt(moves.size())));
 
 		}
+
 	}
 }
