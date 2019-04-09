@@ -16,11 +16,33 @@ public class ScotMask{
 
     public ScotMask (ScotlandYardView view){
         players = view.getPlayers();
-        Cost xTickets = new Cost(view.getPlayerTickets(BLACK, Ticket.TAXI).get(),
-                                 view.getPlayerTickets(BLACK, Ticket.BUS).get(),
-                                 view.getPlayerTickets(BLACK, Ticket.UNDERGROUND).get(),
-                                 view.getPlayerTickets(BLACK, Ticket.SECRET).get(),
-                                 view.getPlayerTickets(BLACK, Ticket.DOUBLE).get());
-        mrX = new Player(view.getPlayerLocation(BLACK).get(), xTickets, BLACK);
+        for(Colour player : players){
+            if(player == BLACK)
+                mrX = new Player(view.getPlayerLocation(BLACK).get(), makeCost(BLACK, view), BLACK);
+            else
+                detectives.add(new Player(view.getPlayerLocation(player).get(), makeCost(player, view), player));
+        }
+
+    }
+
+    private Cost makeCost(Colour colour, ScotlandYardView view){
+
+        return new Cost(view.getPlayerTickets(colour, Ticket.TAXI).get(),
+                        view.getPlayerTickets(colour, Ticket.BUS).get(),
+                        view.getPlayerTickets(colour, Ticket.UNDERGROUND).get(),
+                        view.getPlayerTickets(colour, Ticket.SECRET).get(),
+                        view.getPlayerTickets(colour, Ticket.DOUBLE).get());
+    }
+
+    public List<Player> getDetectives(){
+        return detectives;
+    }
+
+    public Player getMrX(){
+        return mrX;
+    }
+
+    public Graph<Integer, Transport> getGraph(){
+        return graph;
     }
 }

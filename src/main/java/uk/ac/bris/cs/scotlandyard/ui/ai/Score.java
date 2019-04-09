@@ -1,9 +1,20 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai;
 
 public class Score implements ScoreCalculator {
+
     @Override
-    public int getMrXscore(ScotMask mask, int mrXLocation) {
-        return 0;
+    public int getMrXscore(ScotMask mask) {
+
+        int score = 0, min = 999999999, cost;
+        for(Player detective: mask.getDetectives()){
+            Distances d = new Distances(mask.getMrX().getLocation(), detective.getLocation(), mask.getGraph(), detective.getTickets());
+            cost = d.getCost().getCost();
+            if(cost < min)
+                min = cost;
+            score += cost;
+        }
+        score = ((score-min) + min*3)/4;
+        return score;
     }
 
     @Override

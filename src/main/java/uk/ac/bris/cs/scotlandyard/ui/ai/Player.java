@@ -12,4 +12,14 @@ public class Player {
         this.colour = colour;
         this.tickets = tickets;
     }
+
+    public int getLocation(){
+        return location;
+    }
+    public Colour getColour(){
+        return colour;
+    }
+    public Cost getTickets(){
+        return getTickets();
+    }
 }
