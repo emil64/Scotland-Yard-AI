@@ -16,7 +16,7 @@ public class Cost {
         secret = 0;
         x2 = 0;
         ferry = 0;
-        cost = 0;
+        cost = 999999999;
         moves = 0;
     }
 
@@ -87,13 +87,13 @@ public class Cost {
     }
 
     public Boolean hasTaxi(int n){
-        return (taxi <= n);
+        return (taxi >= n);
     }
     public Boolean hasBus(int n){
-        return (bus <= n);
+        return (bus >= n);
     }
     public Boolean hasUnderground(int n){
-        return (underground <= n);
+        return (underground >= n);
     }
 
     public int getTaxi(){

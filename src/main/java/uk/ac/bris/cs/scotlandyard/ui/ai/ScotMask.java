@@ -3,6 +3,8 @@ package uk.ac.bris.cs.scotlandyard.ui.ai;
 import uk.ac.bris.cs.gamekit.graph.Graph;
 import uk.ac.bris.cs.scotlandyard.model.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static uk.ac.bris.cs.scotlandyard.model.Colour.*;
@@ -10,7 +12,7 @@ import static uk.ac.bris.cs.scotlandyard.model.Colour.*;
 public class ScotMask{
 
     private Player mrX;
-    private List<Player> detectives;
+    private List<Player> detectives = new ArrayList<>();
     private Graph<Integer, Transport> graph;
     private List<Colour> players;
 
@@ -22,7 +24,17 @@ public class ScotMask{
             else
                 detectives.add(new Player(view.getPlayerLocation(player).get(), makeCost(player, view), player));
         }
+        graph = view.getGraph();
 
+    }
+
+    public void makeMove(Move move, Colour player){
+        if(player == mrX.getColour()){
+            if(move instanceof TicketMove){
+                TicketMove tm = (TicketMove) move;
+                mrX.setLocation(tm.destination());
+            }
+        }
     }
 
     private Cost makeCost(Colour colour, ScotlandYardView view){

@@ -1,5 +1,8 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai;
 
+import uk.ac.bris.cs.scotlandyard.model.Colour;
+import uk.ac.bris.cs.scotlandyard.model.Move;
+
 public class Score implements ScoreCalculator {
 
     @Override
@@ -13,12 +16,18 @@ public class Score implements ScoreCalculator {
                 min = cost;
             score += cost;
         }
-        score = ((score-min) + min*3)/4;
+        score = ((score-min)/(mask.getDetectives().size()-1)*2 + min*3)/5;
         return score;
     }
 
     @Override
     public int getDetectiveScore(ScotMask mask) {
         return 0;
+    }
+
+    @Override
+    public ScotMask PlayerMoves(ScotMask mask, Colour colour, Move move) {
+
+        return mask;
     }
 }

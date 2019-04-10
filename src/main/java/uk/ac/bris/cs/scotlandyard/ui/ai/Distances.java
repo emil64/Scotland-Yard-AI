@@ -15,7 +15,7 @@ public class Distances {
     private int distance = -1;
     private Cost tickets;
 
-    public Distances(int mrXLocation, int detectiveLocation, Graph<Integer, Transport> graph, Cost availableTickets){
+    public Distances(int mrXLocation, int detectiveLocation, Graph<Integer, Transport> graph, Cost availableTickets) {
         this.graph = graph;
         Xloc = mrXLocation;
         detLoc = detectiveLocation;
@@ -23,60 +23,67 @@ public class Distances {
         tickets = availableTickets;
     }
 
-    Boolean hasEnoughTickets(Cost c){
+    Boolean hasEnoughTickets(Cost c) {
         return tickets.hasBus(c.getBus()) && tickets.hasTaxi(c.getTaxi()) && tickets.hasUnderground(c.getUnderground());
     }
 
-    private class Node{
+    private class Node {
 
         Cost cost;
         int node;
 
-        Node(int start){
+        Node(int start) {
             cost = new Cost();
             node = start;
         }
 
-        Node(Node n){
+        Node(Node n) {
             cost = new Cost(n.cost);
             node = n.node;
         }
     }
 
-    private void BFS(int start, int finish){
+    private void BFS(int start, int finish) {
 
         Queue<Node> q = new ConcurrentLinkedQueue<>();
         q.add(new Node(start));
-        while(!q.isEmpty()){
+        boolean[] viz = new boolean[200];
+        viz[start] = true;
+        while (!q.isEmpty()) {
             Node node = q.poll();
-            if(node.node == finish && node.cost.getCost() < cost.getCost()){
+            if (node.node == finish) {
                 cost = node.cost;
                 distance = node.cost.getMoves();
             }
-            else{
-                Collection<Edge<Integer, Transport>> edges = graph.getEdgesFrom(new uk.ac.bris.cs.gamekit.graph.Node<>(node.node));
-                for (Edge<Integer, Transport> edge : edges){
-                    Transport t = edge.data();
-                    int destination = edge.destination().value();
+            viz[node.node] = true;
+            if (node.node == finish && node.cost.getMoves() > distance)
+                return;
 
-                    Node newNode = new Node(node);
-                    newNode.cost.addTransport(t);
+            Collection<Edge<Integer, Transport>> edges = graph.getEdgesFrom(new uk.ac.bris.cs.gamekit.graph.Node<>(node.node));
+            for (Edge<Integer, Transport> edge : edges) {
+                Transport t = edge.data();
+                int destination = edge.destination().value();
 
-                    if(hasEnoughTickets(newNode.cost))
-                        q.add(newNode);
+                Node newNode = new Node(node);
+                newNode.node = destination;
+                newNode.cost.addTransport(t);
+
+                if (hasEnoughTickets(newNode.cost) && !viz[newNode.node]) {
+                    q.add(newNode);
                 }
             }
+
         }
     }
 
-    public int getDistance(){
-        if(distance != -1)
+    public int getDistance() {
+        if (distance == -1)
             BFS(detLoc, Xloc);
         return distance;
     }
 
-    public Cost getCost(){
-        if(distance != -1)
+    public Cost getCost() {
+        if (distance == -1)
             BFS(detLoc, Xloc);
         return cost;
     }

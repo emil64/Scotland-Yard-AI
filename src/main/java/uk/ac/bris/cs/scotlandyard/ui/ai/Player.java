@@ -20,6 +20,12 @@ public class Player {
         return colour;
     }
     public Cost getTickets(){
-        return getTickets();
+        return tickets;
+    }
+    public void setLocation(int location){
+        this.location = location;
+    }
+    public void setTickets(Cost tickets){
+        this.tickets = tickets;
     }
 }
