@@ -5,6 +5,7 @@ import uk.ac.bris.cs.scotlandyard.model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import static uk.ac.bris.cs.scotlandyard.model.Colour.*;
@@ -15,6 +16,7 @@ public class ScotMask{
     private List<Player> detectives = new ArrayList<>();
     private Graph<Integer, Transport> graph;
     private List<Colour> players;
+    private int roundsSince, roundsTo;
 
     public ScotMask (ScotlandYardView view){
         players = view.getPlayers();
@@ -25,8 +27,29 @@ public class ScotMask{
                 detectives.add(new Player(view.getPlayerLocation(player).get(), makeCost(player, view), player));
         }
         graph = view.getGraph();
+        roundsSince = calculateRoundsSince(view.getRounds(), view.getCurrentRound());
+        roundsTo = calculateRoundsTo(view.getRounds(), view.getCurrentRound());
 
     }
+
+    private int calculateRoundsSince(List<Boolean> rounds, int currentRound){
+
+        int res = 0, r = currentRound;
+        while(r > 0 && !rounds.get(r))
+            r--;
+        res = currentRound - r;
+        return res;
+    }
+
+    private int calculateRoundsTo(List<Boolean> rounds, int currentRound){
+
+        int res = 0, r = currentRound;
+        while(r > 0 && !rounds.get(r))
+            r++;
+        res = r - currentRound;
+        return res;
+    }
+
 
     public void makeMove(Move move, Colour player){
         if(player == mrX.getColour()){
@@ -56,5 +79,12 @@ public class ScotMask{
 
     public Graph<Integer, Transport> getGraph(){
         return graph;
+    }
+
+    public int getRoundsSince(){
+        return roundsSince;
+    }
+    public int getRoundsTo(){
+        return roundsTo;
     }
 }
