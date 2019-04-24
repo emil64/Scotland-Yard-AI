@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.HashSet;
 
 import uk.ac.bris.cs.scotlandyard.ai.ManagedAI;
 import uk.ac.bris.cs.scotlandyard.ai.PlayerFactory;
 import uk.ac.bris.cs.scotlandyard.model.*;
 import uk.ac.bris.cs.scotlandyard.model.Player;
+import uk.ac.bris.cs.gamekit.graph.*;
 
 // TODO name the AI
 @ManagedAI("Neloo")
 public class MyAI implements PlayerFactory {
+
+    static ScotlandYardView view;
+    static ScotMask mask = new ScotMask(view);
 
     // TODO create a new player here
     @Override
@@ -30,6 +35,7 @@ public class MyAI implements PlayerFactory {
                              Consumer<Move> callback) {
             // TODO do something interesting here; find the best move
             // picks a random move
+            minimax(5,true,Integer.MIN_VALUE, Integer.MAX_VALUE, moves);
             callback.accept(getBestMove(moves, view));
 
         }
@@ -49,6 +55,22 @@ public class MyAI implements PlayerFactory {
                 }
             }
             return best;
+        }
+
+        private int minimax(int depth, boolean MrXTurns, int alpha, int beta, Set<Move> nextMovesfromNode) {
+                Score score= new Score();
+                int minEval = Integer.MAX_VALUE;
+                if(depth==0 || view.isGameOver())
+                    return score.getMrXscore(mask);
+                if(MrXTurns) {
+                    int maxEval = Integer.MIN_VALUE;
+                    for (Move move : nextMovesfromNode) {
+                        int eval = minimax(depth - 1, false, alpha, beta, );
+                        maxEval = Integer.max(maxEval, eval);
+                    }
+                    return maxEval;
+                }
+                return 0;
         }
 
     }
