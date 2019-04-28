@@ -16,8 +16,6 @@ import uk.ac.bris.cs.gamekit.graph.*;
 @ManagedAI("Neloo")
 public class MyAI implements PlayerFactory {
 
-    static ScotlandYardView view;
-    static ScotMask mask = new ScotMask(view);
 
     // TODO create a new player here
     @Override
@@ -29,12 +27,16 @@ public class MyAI implements PlayerFactory {
     private static class MyPlayer implements Player {
 
         private final Random random = new Random();
+        private ScotlandYardView view;
+        private ScotMask mask;// = new ScotMask(view);
 
         @Override
         public void makeMove(ScotlandYardView view, int location, Set<Move> moves,
                              Consumer<Move> callback) {
             // TODO do something interesting here; find the best move
             // picks a random move
+            this.view = view;
+            mask = new ScotMask(view);
             minimax(5,true,Integer.MIN_VALUE, Integer.MAX_VALUE, moves);
             callback.accept(getBestMove(moves, view));
 
@@ -65,7 +67,7 @@ public class MyAI implements PlayerFactory {
                 if(MrXTurns) {
                     int maxEval = Integer.MIN_VALUE;
                     for (Move move : nextMovesfromNode) {
-                        int eval = minimax(depth - 1, false, alpha, beta, );
+                        int eval = minimax(depth - 1, false, alpha, beta, null );
                         maxEval = Integer.max(maxEval, eval);
                     }
                     return maxEval;

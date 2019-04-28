@@ -17,6 +17,7 @@ public class ScotMask{
     private Graph<Integer, Transport> graph;
     private List<Colour> players;
     private int roundsSince, roundsTo;
+    private Colour currentPlayer;
 
     public ScotMask (ScotlandYardView view){
         players = view.getPlayers();
@@ -29,6 +30,7 @@ public class ScotMask{
         graph = view.getGraph();
         roundsSince = calculateRoundsSince(view.getRounds(), view.getCurrentRound());
         roundsTo = calculateRoundsTo(view.getRounds(), view.getCurrentRound());
+        currentPlayer = view.getCurrentPlayer();
 
     }
 
@@ -68,6 +70,8 @@ public class ScotMask{
                         view.getPlayerTickets(colour, Ticket.SECRET).get(),
                         view.getPlayerTickets(colour, Ticket.DOUBLE).get());
     }
+
+
 
     public List<Player> getDetectives(){
         return detectives;

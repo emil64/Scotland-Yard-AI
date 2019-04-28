@@ -55,21 +55,23 @@ public class Distances {
                 cost = node.cost;
                 distance = node.cost.getMoves();
             }
-            viz[node.node] = true;
-            if (node.node == finish && node.cost.getMoves() > distance)
-                return;
+            if(true) {
+                viz[node.node] = true;
+                if (node.node == finish && node.cost.getMoves() > distance)
+                    return;
 
-            Collection<Edge<Integer, Transport>> edges = graph.getEdgesFrom(new uk.ac.bris.cs.gamekit.graph.Node<>(node.node));
-            for (Edge<Integer, Transport> edge : edges) {
-                Transport t = edge.data();
-                int destination = edge.destination().value();
+                Collection<Edge<Integer, Transport>> edges = graph.getEdgesFrom(new uk.ac.bris.cs.gamekit.graph.Node<>(node.node));
+                for (Edge<Integer, Transport> edge : edges) {
+                    Transport t = edge.data();
+                    int destination = edge.destination().value();
 
-                Node newNode = new Node(node);
-                newNode.node = destination;
-                newNode.cost.addTransport(t);
+                    Node newNode = new Node(node);
+                    newNode.node = destination;
+                    newNode.cost.addTransport(t);
 
-                if (hasEnoughTickets(newNode.cost) && !viz[newNode.node]) {
-                    q.add(newNode);
+                    if (hasEnoughTickets(newNode.cost) && !viz[newNode.node]) {
+                        q.add(newNode);
+                    }
                 }
             }
 
