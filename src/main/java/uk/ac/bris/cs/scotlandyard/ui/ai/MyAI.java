@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.HashSet;
 
+import ch.qos.logback.core.pattern.color.BlueCompositeConverter;
 import uk.ac.bris.cs.scotlandyard.ai.ManagedAI;
 import uk.ac.bris.cs.scotlandyard.ai.PlayerFactory;
 import uk.ac.bris.cs.scotlandyard.model.*;
@@ -35,6 +36,7 @@ public class MyAI implements PlayerFactory {
                              Consumer<Move> callback) {
             // TODO do something interesting here; find the best move
             // picks a random move
+
             this.view = view;
             mask = new ScotMask(view);
             minimax(5,true,Integer.MIN_VALUE, Integer.MAX_VALUE, moves);

@@ -17,10 +17,11 @@ public class ScotMask{
     private List<Player> detectives = new ArrayList<>();
     private Graph<Integer, Transport> graph;
     private List<Colour> playersList;
-    private Map<Colour, Player> players = new HashMap<>();
+    private Map<Colour, Player> players = new HashMap<Colour, Player>();
     private int roundsSince, roundsTo, currentRound;
     private Colour currentPlayer;
     private Set<Move> validMoves = new HashSet<>();
+    private List<Boolean> rounds;
 
     public ScotMask (ScotlandYardView view){
         playersList = view.getPlayers();
@@ -29,10 +30,12 @@ public class ScotMask{
                 mrX = new Player(view.getPlayerLocation(BLACK).get(), makeCost(BLACK, view), BLACK);
             else
                 detectives.add(new Player(view.getPlayerLocation(player).get(), makeCost(player, view), player));
+            players.put(player, new Player(view.getPlayerLocation(player).get(), makeCost(player, view), player));
         }
         graph = view.getGraph();
         roundsSince = calculateRoundsSince(view.getRounds(), view.getCurrentRound());
         roundsTo = calculateRoundsTo(view.getRounds(), view.getCurrentRound());
+        rounds = view.getRounds();
         currentPlayer = view.getCurrentPlayer();
 
     }
@@ -82,6 +85,10 @@ public class ScotMask{
 
     public Player getMrX(){
         return mrX;
+    }
+
+    public Player getDetective(Colour colour){
+        return players.get(colour);
     }
 
     public Graph<Integer, Transport> getGraph(){

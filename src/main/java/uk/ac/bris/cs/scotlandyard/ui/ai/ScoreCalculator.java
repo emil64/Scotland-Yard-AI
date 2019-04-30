@@ -8,7 +8,7 @@ public interface ScoreCalculator {
 
     public int getMrXscore(ScotMask mask);
 
-    public int getDetectiveScore(ScotMask mask);
+    public int getDetectiveScore(ScotMask mask, int Xloc, Colour player);
 
     public ScotMask PlayerMoves(ScotMask mask, Colour colour, Move move);
 

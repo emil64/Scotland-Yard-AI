@@ -21,8 +21,8 @@ public class Score implements ScoreCalculator {
     }
 
     @Override
-    public int getDetectiveScore(ScotMask mask) {
-        return 0;
+    public int getDetectiveScore(ScotMask mask, int Xloc, Colour player) {
+        return new Distances(mask.getDetective(player).getLocation(), Xloc, mask.getGraph(), mask.getDetective(player).getTickets()).getCost().getCost();
     }
 
     @Override
