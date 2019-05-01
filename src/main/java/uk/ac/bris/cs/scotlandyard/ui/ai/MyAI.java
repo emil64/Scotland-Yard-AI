@@ -24,6 +24,7 @@ public class MyAI implements PlayerFactory {
 
         //private final Random random = new Random();
 
+        Move bestMove;
 
         @Override
         public void makeMove(ScotlandYardView view, int location, Set<Move> moves,
@@ -33,12 +34,12 @@ public class MyAI implements PlayerFactory {
 
             ScotMask mask = new ScotMask(view);
             mask.setXLocation(location);
-            minimax(5,true, mask, Integer.MIN_VALUE, Integer.MAX_VALUE, moves);
-            callback.accept(getBestMove(moves, view));
+            minimax(2,true, mask, Integer.MIN_VALUE, Integer.MAX_VALUE, moves, location);
+            callback.accept(bestMove);
 
         }
 
-        private Move getBestMove(Set<Move> moves, ScotlandYardView view) {
+        /*private Move getBestMove(Set<Move> moves, ScotlandYardView view) {
             Move best = new PassMove(Colour.BLACK);
             int bestScore = 0;
             for (Move move : moves) {
@@ -53,31 +54,60 @@ public class MyAI implements PlayerFactory {
                 }
             }
             return best;
+        }*/
+
+        private Move getDetectiveBestMove(Set<Move> moves, ScotlandYardView view, Colour detective, int Xloc) {
+            Move best = new PassMove(detective);
+            int bestScore = Integer.MAX_VALUE;
+            for (Move move : moves) {
+                ScotMask mask = new ScotMask(view);
+
+                mask.makeMove(move, detective);
+                int score = new Score().getDetectiveScore(mask, Xloc, detective);
+
+                if (score < bestScore) {
+                    bestScore = score;
+                    best = move;
+                }
+
+            }
+            return best;
         }
 
-        private int minimax(int depth, boolean MrXTurns, ScotlandYardView view, int alpha, int beta, Set<Move> nextMovesfromNode) {
+
+        private int minimax(int depth, boolean MrXTurns, ScotlandYardView view, int alpha, int beta, Set<Move> nextMovesfromNode, int Xloc) {
                 Score score= new Score();
                 ScotMask mask = new ScotMask(view);
-                int eval = 0;
+                mask.setCurrentPlayer(MrXTurns);
+                int eval;
                 if(depth==0 || view.isGameOver())
                     return score.getMrXscore(mask);
                 if(MrXTurns) {
                     int maxEval = Integer.MIN_VALUE;
                     for (Move move : nextMovesfromNode) {
-                        eval = minimax(depth - 1, false, mask, alpha, beta, mask.getValidMoves(Colour.BLACK));
+                        mask.makeMove(move, Colour.BLACK);
+                        eval = minimax(depth - 1, false, mask, alpha, beta, null, mask.getMrX().getLocation());
                         maxEval = Integer.max(maxEval, eval);
+                        if (eval > alpha) {
+                            alpha = eval;
+                            bestMove = move;
+                        }
+                        if (beta <= alpha)
+                            break;
                     }
-                    return maxEval;
+                    return alpha;
                 }
                 else {
-                    return 0;
-                    /*int minEval = Integer.MAX_VALUE;
-                    //for( )
-                    for (Move move : nextMovesfromNode) {
-                        eval = minimax(depth - 1, true, view, alpha, beta, mask.getValidMoves(Colour.BLACK));
-                        minEval = Integer.min(minEval, eval);
+                    int minEval = 0;
+                    for(uk.ac.bris.cs.scotlandyard.ui.ai.Player p : mask.getDetectives()) {
+
+                        mask.makeMove(getDetectiveBestMove(mask.getValidMoves(p.getColour()), mask, p.getColour(), Xloc), p.getColour());
+                        minEval += new Score().getDetectiveScore(mask, Xloc, p.getColour());
+
                     }
-                    return minEval;*/
+                    if(minEval < beta)
+                        beta = minEval;
+                    return minimax(depth - 1, true, mask, alpha, beta, mask.getValidMoves(Colour.BLACK), mask.getMrX().getLocation());
                 }
         }
 

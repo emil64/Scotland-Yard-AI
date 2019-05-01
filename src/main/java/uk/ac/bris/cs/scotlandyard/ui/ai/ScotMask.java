@@ -3,6 +3,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai;
 import uk.ac.bris.cs.gamekit.graph.Edge;
 import uk.ac.bris.cs.gamekit.graph.Graph;
 import uk.ac.bris.cs.gamekit.graph.Node;
+
 import uk.ac.bris.cs.scotlandyard.model.*;
 
 import java.util.*;
@@ -28,18 +29,24 @@ public class ScotMask implements ScotlandYardView{
      ScotMask (ScotlandYardView view){
         playersList = view.getPlayers();
         for(Colour player : playersList){
-            if(player == BLACK)
+            Player p;
+            if(player == BLACK) {
                 mrX = new Player(view.getPlayerLocation(BLACK).get(), makeCost(BLACK, view), BLACK);
-            else
-                detectives.add(new Player(view.getPlayerLocation(player).get(), makeCost(player, view), player));
-            players.put(player, new Player(view.getPlayerLocation(player).get(), makeCost(player, view), player));
+                p = mrX;
+            }
+            else {
+                p = new Player(view.getPlayerLocation(player).get(), makeCost(player, view), player);
+                detectives.add(p);
+            }
+            players.put(player, p);
+
         }
         graph = view.getGraph();
         roundsSince = calculateRoundsSince(view.getRounds(), view.getCurrentRound());
         roundsTo = calculateRoundsTo(view.getRounds(), view.getCurrentRound());
         rounds = view.getRounds();
         currentPlayer = view.getCurrentPlayer();
-        gameOver = view.isGameOver();
+        gameOver = false;
         currentRound = view.getCurrentRound();
         winningPlayer = new HashSet<>();
 
@@ -75,6 +82,16 @@ public class ScotMask implements ScotlandYardView{
             if(move instanceof TicketMove){
                 TicketMove tm = (TicketMove) move;
                 mrX.setLocation(tm.destination());
+                players.get(BLACK).setLocation(tm.destination());
+            }
+        }
+        else{
+            if(move instanceof TicketMove){
+                TicketMove tm = (TicketMove) move;
+                players.get(player).setLocation(tm.destination());
+                players.get(player).getTickets().removeTicket(tm.ticket());
+                players.get(BLACK).getTickets().addTicket(tm.ticket());
+                mrX = players.get(BLACK);
             }
         }
     }
@@ -88,7 +105,12 @@ public class ScotMask implements ScotlandYardView{
                         view.getPlayerTickets(colour, Ticket.DOUBLE).get());
     }
 
-
+    void setCurrentPlayer(boolean MrXTrns){
+         if(MrXTrns)
+             currentPlayer = BLACK;
+         else
+             currentPlayer = detectives.get(1).getColour();
+    }
 
     List<Player> getDetectives(){
         return detectives;

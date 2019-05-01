@@ -54,6 +54,27 @@ class Cost {
             addFerry();
     }
 
+    private void changeTicket(Ticket t, int n){
+        if(t == Ticket.BUS)
+            bus+=n;
+        if(t == Ticket.TAXI)
+            taxi+=n;
+        if(t == Ticket.UNDERGROUND)
+            underground+=n;
+        if(t == Ticket.SECRET)
+            secret+=n;
+        if(t == Ticket.DOUBLE)
+            x2+=n;
+    }
+
+    void addTicket(Ticket t){
+        changeTicket(t, 1);
+    }
+
+    void removeTicket(Ticket t){
+        changeTicket(t, -1);
+    }
+
     private void addBus(){
         bus++;
         moves++;
