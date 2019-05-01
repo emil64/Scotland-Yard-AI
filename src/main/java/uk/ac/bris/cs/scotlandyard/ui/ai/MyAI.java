@@ -39,7 +39,8 @@ public class MyAI implements PlayerFactory {
 
             this.view = view;
             mask = new ScotMask(view);
-            minimax(5,true, view, Integer.MIN_VALUE, Integer.MAX_VALUE, moves);
+            mask.setXLocation(location);
+            minimax(5,true, mask, Integer.MIN_VALUE, Integer.MAX_VALUE, moves);
             callback.accept(getBestMove(moves, view));
 
         }
@@ -70,7 +71,7 @@ public class MyAI implements PlayerFactory {
                 if(MrXTurns) {
                     int maxEval = Integer.MIN_VALUE;
                     for (Move move : nextMovesfromNode) {
-                        int eval = minimax(depth - 1, false, view, alpha, beta, mask.getValidMoves(Colour.BLACK));
+                        int eval = minimax(depth - 1, false, mask, alpha, beta, mask.getValidMoves(Colour.BLACK));
                         maxEval = Integer.max(maxEval, eval);
                     }
                     return maxEval;

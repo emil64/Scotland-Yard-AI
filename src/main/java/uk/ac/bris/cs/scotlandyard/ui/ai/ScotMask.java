@@ -23,7 +23,7 @@ public class ScotMask implements ScotlandYardView{
     private Set<Move> validMoves = new HashSet<>();
     private List<Boolean> rounds;
     private boolean gameOver;
-    private Set<Colour> winningPlayers;
+    private Set<Colour> winningPlayer;
 
     public ScotMask (ScotlandYardView view){
         playersList = view.getPlayers();
@@ -42,7 +42,11 @@ public class ScotMask implements ScotlandYardView{
         gameOver = view.isGameOver();
     }
 
-
+    public void setXLocation(int location){
+        mrX.setLocation(location);
+        players.get(BLACK).setLocation(location);
+        //System.out.println("Se fute in Scotmask " + players.get(BLACK).getLocation());
+    }
 
     private int calculateRoundsSince(List<Boolean> rounds, int currentRound){
 
@@ -111,13 +115,14 @@ public class ScotMask implements ScotlandYardView{
 
     @Override
     public List<Boolean> getRounds() {
-        return null;
+        return rounds;
     }
 
     private Set<Move> validMove(Colour player) {
         Player p;
         p = players.get(player);
         validMoves.clear();
+        //System.out.println(p.getLocation() + " Aici nu se fute nimic");
         Collection<Edge<Integer, Transport>> edges = getGraph().getEdgesFrom(new Node<>(p.getLocation()));
         for (Edge<Integer, Transport> edge : edges){
             Transport t = edge.data();
@@ -158,7 +163,7 @@ public class ScotMask implements ScotlandYardView{
 
     @Override
     public Set<Colour> getWinningPlayers() {
-        return winningPlayers;
+        return winningPlayer;
     }
 
     @Override
@@ -168,11 +173,57 @@ public class ScotMask implements ScotlandYardView{
 
     @Override
     public Optional<Integer> getPlayerTickets(Colour colour, Ticket ticket) {
-        return Optional.of(players.get(colour).getTickets().getTickets(ticket));
+        return Optional.of(players.get(colour).getTickets().getTicket(ticket));
+    }
+
+    private boolean checkGameOver(){
+        gameOver = noMoreRounds() || mrXStuck() || stuckDetectives() || mrXCaptured();
+        return gameOver;
+    }
+
+    private boolean noMoreRounds(){
+        if(getCurrentRound() >= rounds.size()){
+            winningPlayer.add(mrX.getColour());
+            return true;
+        }
+        return false;
+    }
+
+    private boolean stuckDetectives(){
+        boolean stuck = true;
+        for(Player detective : detectives){
+            if(!validMove(detective.getColour()).contains(new PassMove(detective.getColour())))
+                stuck = false;
+        }
+        if(stuck){
+            winningPlayer.add(mrX.getColour());
+            return true;
+        }
+        return false;
+    }
+
+    private boolean mrXCaptured(){
+        for (Player detective : detectives)
+            if(detective.getLocation() == mrX.getLocation()){
+                winningPlayer.addAll(playersList.subList(1, playersList.size()));
+                return true;
+            }
+        return false;
+    }
+
+    private boolean mrXStuck(){
+        if(getCurrentPlayer() == mrX.getColour())
+            if(validMove(mrX.getColour()).isEmpty()){
+                winningPlayer.addAll(playersList.subList(1, playersList.size()));
+                gameOver = true;
+                return true;
+            }
+        return false;
     }
 
     public boolean isGameOver(){
-        return gameOver;
+
+        return checkGameOver();
     }
 
     @Override

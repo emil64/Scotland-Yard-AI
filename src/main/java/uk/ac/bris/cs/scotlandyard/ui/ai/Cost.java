@@ -106,8 +106,16 @@ public class Cost {
     public int getUnderground(){
         return underground;
     }
+    public int getSecret() { return secret; }
+    public int getX2() { return x2; }
 
     public int getTicket(Ticket ticket){
-
+        if(ticket == Ticket.TAXI) return getTaxi();
+        if(ticket == Ticket.BUS) return getBus();
+        if(ticket == Ticket.UNDERGROUND) return getUnderground();
+        if(ticket == Ticket.SECRET) return getSecret();
+        if(ticket == Ticket.DOUBLE) return getX2();
+        return 0;
     }
+
 }
