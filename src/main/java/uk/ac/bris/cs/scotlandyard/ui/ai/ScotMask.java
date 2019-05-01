@@ -17,7 +17,7 @@ public class ScotMask implements ScotlandYardView{
     private List<Player> detectives = new ArrayList<>();
     private Graph<Integer, Transport> graph;
     private List<Colour> playersList;
-    private Map<Colour, Player> players = new HashMap<Colour, Player>();
+    private Map<Colour, Player> players = new HashMap<>();
     private int roundsSince, roundsTo, currentRound;
     private Colour currentPlayer;
     private Set<Move> validMoves = new HashSet<>();
@@ -25,7 +25,7 @@ public class ScotMask implements ScotlandYardView{
     private boolean gameOver;
     private Set<Colour> winningPlayer;
 
-    public ScotMask (ScotlandYardView view){
+     ScotMask (ScotlandYardView view){
         playersList = view.getPlayers();
         for(Colour player : playersList){
             if(player == BLACK)
@@ -40,9 +40,12 @@ public class ScotMask implements ScotlandYardView{
         rounds = view.getRounds();
         currentPlayer = view.getCurrentPlayer();
         gameOver = view.isGameOver();
+        currentRound = view.getCurrentRound();
+        winningPlayer = new HashSet<>();
+
     }
 
-    public void setXLocation(int location){
+    void setXLocation(int location){
         mrX.setLocation(location);
         players.get(BLACK).setLocation(location);
         //System.out.println("Se fute in Scotmask " + players.get(BLACK).getLocation());
@@ -50,7 +53,7 @@ public class ScotMask implements ScotlandYardView{
 
     private int calculateRoundsSince(List<Boolean> rounds, int currentRound){
 
-        int res = 0, r = currentRound;
+        int res, r = currentRound;
         while(r > 0 && !rounds.get(r))
             r--;
         res = currentRound - r;
@@ -59,7 +62,7 @@ public class ScotMask implements ScotlandYardView{
 
     private int calculateRoundsTo(List<Boolean> rounds, int currentRound){
 
-        int res = 0, r = currentRound;
+        int res, r = currentRound;
         while(r > 0 && !rounds.get(r))
             r++;
         res = r - currentRound;
@@ -67,7 +70,7 @@ public class ScotMask implements ScotlandYardView{
     }
 
 
-    public void makeMove(Move move, Colour player){
+    void makeMove(Move move, Colour player){
         if(player == mrX.getColour()){
             if(move instanceof TicketMove){
                 TicketMove tm = (TicketMove) move;
@@ -87,15 +90,15 @@ public class ScotMask implements ScotlandYardView{
 
 
 
-    public List<Player> getDetectives(){
+    List<Player> getDetectives(){
         return detectives;
     }
 
-    public Player getMrX(){
+    Player getMrX(){
         return mrX;
     }
 
-    public Player getDetective(Colour colour){
+    Player getDetective(Colour colour){
         return players.get(colour);
     }
 
@@ -152,7 +155,7 @@ public class ScotMask implements ScotlandYardView{
         return Collections.unmodifiableSet(validMoves);
     }
 
-    public Set<Move> getValidMoves(Colour player){
+    Set<Move> getValidMoves(Colour player){
         return validMove(player);
     }
 

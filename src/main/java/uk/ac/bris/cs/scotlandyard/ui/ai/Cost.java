@@ -5,12 +5,12 @@ import uk.ac.bris.cs.scotlandyard.model.Transport;
 
 import static uk.ac.bris.cs.scotlandyard.model.Transport.*;
 
-public class Cost {
+class Cost {
 
     private int taxi, bus, underground, secret, x2, ferry;
     private int cost, moves;
 
-    public Cost(){
+    Cost(){
         taxi = 0;
         bus = 0;
         underground = 0;
@@ -21,7 +21,7 @@ public class Cost {
         moves = 0;
     }
 
-    public Cost(Cost c){
+    Cost(Cost c){
         taxi = c.taxi;
         bus = c.bus;
         underground = c.underground;
@@ -32,7 +32,7 @@ public class Cost {
         moves = c.moves;
     }
 
-    public Cost(int taxi, int bus, int underground, int secret, int x2){
+    Cost(int taxi, int bus, int underground, int secret, int x2){
         this.taxi = taxi;
         this.bus = bus;
         this.underground = underground;
@@ -43,7 +43,7 @@ public class Cost {
         cost = 0;
     }
 
-    public void addTransport(Transport transport){
+    void addTransport(Transport transport){
         if(transport == BUS)
             addBus();
         if(transport == TAXI)
@@ -79,37 +79,44 @@ public class Cost {
         x2++;
     }
 
-    public int getCost(){
+    int getScore(){
         return moves*1000 + taxi*2 + bus * 3 + underground * 6;
     }
 
-    public int getMoves(){
+    int getMoves(){
         return moves;
     }
 
-    public Boolean hasTaxi(int n){
+    Boolean hasTaxi(int n){
         return (taxi >= n);
     }
-    public Boolean hasBus(int n){
+    Boolean hasBus(int n){
         return (bus >= n);
     }
-    public Boolean hasUnderground(int n){
+    Boolean hasUnderground(int n){
         return (underground >= n);
     }
+    Boolean hasSecret(int n){
+        return (secret >= n);
+    }
+    Boolean hasDouble(int n){
+        return (x2 >= n);
+    }
 
-    public int getTaxi(){
+
+    int getTaxi(){
         return taxi;
     }
-    public int getBus(){
+    int getBus(){
         return bus;
     }
-    public int getUnderground(){
+    int getUnderground(){
         return underground;
     }
-    public int getSecret() { return secret; }
-    public int getX2() { return x2; }
+    int getSecret() { return secret; }
+    int getX2() { return x2; }
 
-    public int getTicket(Ticket ticket){
+    int getTicket(Ticket ticket){
         if(ticket == Ticket.TAXI) return getTaxi();
         if(ticket == Ticket.BUS) return getBus();
         if(ticket == Ticket.UNDERGROUND) return getUnderground();

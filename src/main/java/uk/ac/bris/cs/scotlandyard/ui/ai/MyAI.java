@@ -1,17 +1,12 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai;
 
-import java.util.ArrayList;
-import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.HashSet;
 
-import ch.qos.logback.core.pattern.color.BlueCompositeConverter;
 import uk.ac.bris.cs.scotlandyard.ai.ManagedAI;
 import uk.ac.bris.cs.scotlandyard.ai.PlayerFactory;
 import uk.ac.bris.cs.scotlandyard.model.*;
 import uk.ac.bris.cs.scotlandyard.model.Player;
-import uk.ac.bris.cs.gamekit.graph.*;
 
 // TODO name the AI
 @ManagedAI("Neloo")
@@ -27,9 +22,8 @@ public class MyAI implements PlayerFactory {
     // TODO A sample player that selects a random move
     private static class MyPlayer implements Player {
 
-        private final Random random = new Random();
-        private ScotlandYardView view;
-        private ScotMask mask;// = new ScotMask(view);
+        //private final Random random = new Random();
+
 
         @Override
         public void makeMove(ScotlandYardView view, int location, Set<Move> moves,
@@ -37,8 +31,7 @@ public class MyAI implements PlayerFactory {
             // TODO do something interesting here; find the best move
             // picks a random move
 
-            this.view = view;
-            mask = new ScotMask(view);
+            ScotMask mask = new ScotMask(view);
             mask.setXLocation(location);
             minimax(5,true, mask, Integer.MIN_VALUE, Integer.MAX_VALUE, moves);
             callback.accept(getBestMove(moves, view));
@@ -77,13 +70,14 @@ public class MyAI implements PlayerFactory {
                     return maxEval;
                 }
                 else {
-                    int minEval = Integer.MAX_VALUE;
+                    return 0;
+                    /*int minEval = Integer.MAX_VALUE;
                     //for( )
                     for (Move move : nextMovesfromNode) {
                         eval = minimax(depth - 1, true, view, alpha, beta, mask.getValidMoves(Colour.BLACK));
                         minEval = Integer.min(minEval, eval);
                     }
-                    return minEval;
+                    return minEval;*/
                 }
         }
 

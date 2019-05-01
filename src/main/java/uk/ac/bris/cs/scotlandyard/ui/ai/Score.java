@@ -11,7 +11,7 @@ public class Score implements ScoreCalculator {
         int score = 0, min = 999999999, cost;
         for(Player detective: mask.getDetectives()){
             Distances d = new Distances(mask.getMrX().getLocation(), detective.getLocation(), mask.getGraph(), detective.getTickets());
-            cost = d.getCost().getCost();
+            cost = d.getCost().getScore();
             if(cost < min)
                 min = cost;
             score += cost;
@@ -22,7 +22,7 @@ public class Score implements ScoreCalculator {
 
     @Override
     public int getDetectiveScore(ScotMask mask, int Xloc, Colour player) {
-        return new Distances(mask.getDetective(player).getLocation(), Xloc, mask.getGraph(), mask.getDetective(player).getTickets()).getCost().getCost();
+        return new Distances(mask.getDetective(player).getLocation(), Xloc, mask.getGraph(), mask.getDetective(player).getTickets()).getCost().getScore();
     }
 
     @Override

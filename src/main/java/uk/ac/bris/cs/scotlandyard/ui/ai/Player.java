@@ -3,38 +3,50 @@ package uk.ac.bris.cs.scotlandyard.ui.ai;
 import uk.ac.bris.cs.scotlandyard.model.Colour;
 import uk.ac.bris.cs.scotlandyard.model.Ticket;
 
-public class Player {
+import static uk.ac.bris.cs.scotlandyard.model.Ticket.*;
+
+class Player {
     private int location;
     private Cost tickets;
     private Colour colour;
 
-    public Player(int location, Cost tickets, Colour colour){
+    Player(int location, Cost tickets, Colour colour){
         this.location = location;
         this.colour = colour;
         this.tickets = tickets;
     }
 
-    public int getLocation(){
+    int getLocation(){
         return location;
     }
-    public Colour getColour(){
+    Colour getColour(){
         return colour;
     }
-    public Cost getTickets(){
+    Cost getTickets(){
         return tickets;
     }
-    public void setLocation(int location){
+    void setLocation(int location){
         this.location = location;
     }
-    public void setTickets(Cost tickets){
+    /*public void setTickets(Cost tickets){
         this.tickets = tickets;
+    }*/
+
+    boolean hasTickets(Ticket ticket) {
+       return hasNumberTickets(ticket, 1);
     }
 
-    public boolean hasTickets(Ticket ticket) {
-        return tickets.hasTaxi(1) && tickets.hasBus(1) && tickets.hasUnderground(1);
-    }
-
-    public boolean hasNumberTickets(Ticket ticket, int quantityInclusive) {
-        return tickets.hasTaxi(quantityInclusive) && tickets.hasBus(quantityInclusive) && tickets.hasUnderground(quantityInclusive);
+    boolean hasNumberTickets(Ticket ticket, int quantityInclusive) {
+        if(ticket == TAXI)
+            return tickets.hasTaxi(quantityInclusive);
+        if(ticket == BUS)
+            return tickets.hasBus(quantityInclusive);
+        if(ticket == UNDERGROUND)
+            return tickets.hasUnderground(quantityInclusive);
+        if(ticket == SECRET)
+            return tickets.hasSecret(quantityInclusive);
+        if(ticket == DOUBLE)
+            return tickets.hasDouble(quantityInclusive);
+        return false;
     }
 }

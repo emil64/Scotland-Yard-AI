@@ -7,15 +7,15 @@ import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class Distances {
+class Distances {
 
     private Cost cost;
     private int Xloc, detLoc;
-    Graph<Integer, Transport> graph;
+    private Graph<Integer, Transport> graph;
     private int distance = -1;
     private Cost tickets;
 
-    public Distances(int mrXLocation, int detectiveLocation, Graph<Integer, Transport> graph, Cost availableTickets) {
+    Distances(int mrXLocation, int detectiveLocation, Graph<Integer, Transport> graph, Cost availableTickets) {
         this.graph = graph;
         Xloc = mrXLocation;
         detLoc = detectiveLocation;
@@ -23,7 +23,7 @@ public class Distances {
         tickets = availableTickets;
     }
 
-    Boolean hasEnoughTickets(Cost c) {
+    private Boolean hasEnoughTickets(Cost c) {
         return tickets.hasBus(c.getBus()) && tickets.hasTaxi(c.getTaxi()) && tickets.hasUnderground(c.getUnderground());
     }
 
@@ -55,36 +55,28 @@ public class Distances {
                 cost = node.cost;
                 distance = node.cost.getMoves();
             }
-            if(true) {
-                viz[node.node] = true;
-                if (node.node == finish && node.cost.getMoves() > distance)
-                    return;
+            viz[node.node] = true;
+            if (node.node == finish && node.cost.getMoves() > distance)
+                return;
 
-                Collection<Edge<Integer, Transport>> edges = graph.getEdgesFrom(new uk.ac.bris.cs.gamekit.graph.Node<>(node.node));
-                for (Edge<Integer, Transport> edge : edges) {
-                    Transport t = edge.data();
-                    int destination = edge.destination().value();
+            Collection<Edge<Integer, Transport>> edges = graph.getEdgesFrom(new uk.ac.bris.cs.gamekit.graph.Node<>(node.node));
+            for (Edge<Integer, Transport> edge : edges) {
+                Transport t = edge.data();
+                int destination = edge.destination().value();
 
-                    Node newNode = new Node(node);
-                    newNode.node = destination;
-                    newNode.cost.addTransport(t);
+                Node newNode = new Node(node);
+                newNode.node = destination;
+                newNode.cost.addTransport(t);
 
-                    if (hasEnoughTickets(newNode.cost) && !viz[newNode.node]) {
-                        q.add(newNode);
-                    }
+                if (hasEnoughTickets(newNode.cost) && !viz[newNode.node]) {
+                    q.add(newNode);
                 }
             }
-
         }
     }
 
-    public int getDistance() {
-        if (distance == -1)
-            BFS(detLoc, Xloc);
-        return distance;
-    }
 
-    public Cost getCost() {
+    Cost getCost() {
         if (distance == -1)
             BFS(detLoc, Xloc);
         return cost;
