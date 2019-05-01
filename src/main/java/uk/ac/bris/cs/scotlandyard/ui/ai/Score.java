@@ -27,7 +27,6 @@ public class Score implements ScoreCalculator {
 
     @Override
     public ScotMask PlayerMoves(ScotMask mask, Colour colour, Move move) {
-
         return mask;
     }
 }

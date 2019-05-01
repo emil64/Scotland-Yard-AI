@@ -65,20 +65,26 @@ public class MyAI implements PlayerFactory {
         private int minimax(int depth, boolean MrXTurns, ScotlandYardView view, int alpha, int beta, Set<Move> nextMovesfromNode) {
                 Score score= new Score();
                 ScotMask mask = new ScotMask(view);
-                int minEval = Integer.MAX_VALUE;
+                int eval = 0;
                 if(depth==0 || view.isGameOver())
                     return score.getMrXscore(mask);
                 if(MrXTurns) {
                     int maxEval = Integer.MIN_VALUE;
                     for (Move move : nextMovesfromNode) {
-                        int eval = minimax(depth - 1, false, mask, alpha, beta, mask.getValidMoves(Colour.BLACK));
+                        eval = minimax(depth - 1, false, mask, alpha, beta, mask.getValidMoves(Colour.BLACK));
                         maxEval = Integer.max(maxEval, eval);
                     }
                     return maxEval;
                 }
-                else
-                    System.out.println("ceva se fute");
-                return 0;
+                else {
+                    int minEval = Integer.MAX_VALUE;
+                    //for( )
+                    for (Move move : nextMovesfromNode) {
+                        eval = minimax(depth - 1, true, view, alpha, beta, mask.getValidMoves(Colour.BLACK));
+                        minEval = Integer.min(minEval, eval);
+                    }
+                    return minEval;
+                }
         }
 
     }
