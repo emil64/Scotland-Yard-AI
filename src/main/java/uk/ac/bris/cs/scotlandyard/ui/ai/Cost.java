@@ -1,5 +1,6 @@
 package uk.ac.bris.cs.scotlandyard.ui.ai;
 
+import uk.ac.bris.cs.scotlandyard.model.Ticket;
 import uk.ac.bris.cs.scotlandyard.model.Transport;
 
 import static uk.ac.bris.cs.scotlandyard.model.Transport.*;
@@ -104,5 +105,9 @@ public class Cost {
     }
     public int getUnderground(){
         return underground;
+    }
+
+    public int getTicket(Ticket ticket){
+
     }
 }

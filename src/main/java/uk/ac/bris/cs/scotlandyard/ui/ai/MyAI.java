@@ -39,7 +39,7 @@ public class MyAI implements PlayerFactory {
 
             this.view = view;
             mask = new ScotMask(view);
-            minimax(5,true,Integer.MIN_VALUE, Integer.MAX_VALUE, moves);
+            minimax(5,true, view, Integer.MIN_VALUE, Integer.MAX_VALUE, moves);
             callback.accept(getBestMove(moves, view));
 
         }
@@ -61,19 +61,22 @@ public class MyAI implements PlayerFactory {
             return best;
         }
 
-        private int minimax(int depth, boolean MrXTurns, int alpha, int beta, Set<Move> nextMovesfromNode) {
+        private int minimax(int depth, boolean MrXTurns, ScotlandYardView view, int alpha, int beta, Set<Move> nextMovesfromNode) {
                 Score score= new Score();
+                ScotMask mask = new ScotMask(view);
                 int minEval = Integer.MAX_VALUE;
                 if(depth==0 || view.isGameOver())
                     return score.getMrXscore(mask);
                 if(MrXTurns) {
                     int maxEval = Integer.MIN_VALUE;
                     for (Move move : nextMovesfromNode) {
-                        int eval = minimax(depth - 1, false, alpha, beta, null );
+                        int eval = minimax(depth - 1, false, view, alpha, beta, mask.getValidMoves(Colour.BLACK));
                         maxEval = Integer.max(maxEval, eval);
                     }
                     return maxEval;
                 }
+                else
+                    System.out.println("ceva se fute");
                 return 0;
         }
 

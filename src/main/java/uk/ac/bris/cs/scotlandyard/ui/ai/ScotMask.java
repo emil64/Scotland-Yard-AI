@@ -11,7 +11,7 @@ import static uk.ac.bris.cs.scotlandyard.model.Colour.*;
 import static uk.ac.bris.cs.scotlandyard.model.Ticket.DOUBLE;
 import static uk.ac.bris.cs.scotlandyard.model.Ticket.SECRET;
 
-public class ScotMask{
+public class ScotMask implements ScotlandYardView{
 
     private Player mrX;
     private List<Player> detectives = new ArrayList<>();
@@ -22,6 +22,8 @@ public class ScotMask{
     private Colour currentPlayer;
     private Set<Move> validMoves = new HashSet<>();
     private List<Boolean> rounds;
+    private boolean gameOver;
+    private Set<Colour> winningPlayers;
 
     public ScotMask (ScotlandYardView view){
         playersList = view.getPlayers();
@@ -37,8 +39,10 @@ public class ScotMask{
         roundsTo = calculateRoundsTo(view.getRounds(), view.getCurrentRound());
         rounds = view.getRounds();
         currentPlayer = view.getCurrentPlayer();
-
+        gameOver = view.isGameOver();
     }
+
+
 
     private int calculateRoundsSince(List<Boolean> rounds, int currentRound){
 
@@ -105,6 +109,11 @@ public class ScotMask{
         return currentRound;
     }
 
+    @Override
+    public List<Boolean> getRounds() {
+        return null;
+    }
+
     private Set<Move> validMove(Colour player) {
         Player p;
         p = players.get(player);
@@ -136,6 +145,39 @@ public class ScotMask{
             validMoves.addAll(possibleDoubleMoves(validMoves));
         }
         return Collections.unmodifiableSet(validMoves);
+    }
+
+    public Set<Move> getValidMoves(Colour player){
+        return validMove(player);
+    }
+
+    @Override
+    public List<Colour> getPlayers() {
+        return playersList;
+    }
+
+    @Override
+    public Set<Colour> getWinningPlayers() {
+        return winningPlayers;
+    }
+
+    @Override
+    public Optional<Integer> getPlayerLocation(Colour colour) {
+        return Optional.of(players.get(colour).getLocation());
+    }
+
+    @Override
+    public Optional<Integer> getPlayerTickets(Colour colour, Ticket ticket) {
+        return Optional.of(players.get(colour).getTickets().getTickets(ticket));
+    }
+
+    public boolean isGameOver(){
+        return gameOver;
+    }
+
+    @Override
+    public Colour getCurrentPlayer() {
+        return currentPlayer;
     }
 
     private Set<Move> possibleDoubleMoves(Set<Move> moves){
