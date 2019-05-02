@@ -83,6 +83,15 @@ public class ScotMask implements ScotlandYardView{
                 TicketMove tm = (TicketMove) move;
                 mrX.setLocation(tm.destination());
                 players.get(BLACK).setLocation(tm.destination());
+                mrX.getTickets().removeTicket(tm.ticket());
+            }
+            if(move instanceof DoubleMove){
+                DoubleMove dm = (DoubleMove) move;
+                mrX.setLocation(dm.secondMove().destination());
+                players.get(BLACK).setLocation(dm.secondMove().destination());
+                mrX.getTickets().removeTicket(DOUBLE);
+                mrX.getTickets().removeTicket(dm.firstMove().ticket());
+                mrX.getTickets().removeTicket(dm.secondMove().ticket());
             }
         }
         else{

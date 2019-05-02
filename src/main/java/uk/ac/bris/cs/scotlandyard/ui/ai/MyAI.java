@@ -34,7 +34,7 @@ public class MyAI implements PlayerFactory {
 
             ScotMask mask = new ScotMask(view);
             mask.setXLocation(location);
-            minimax(2,true, mask, Integer.MIN_VALUE, Integer.MAX_VALUE, moves, location);
+            minimax(4,true, mask, Integer.MIN_VALUE, Integer.MAX_VALUE, moves, location);
             callback.accept(bestMove);
 
         }
@@ -89,8 +89,10 @@ public class MyAI implements PlayerFactory {
                         eval = minimax(depth - 1, false, mask, alpha, beta, null, mask.getMrX().getLocation());
                         maxEval = Integer.max(maxEval, eval);
                         if (eval > alpha) {
-                            alpha = eval;
-                            bestMove = move;
+                            if((move instanceof  DoubleMove && eval < 3300) || move instanceof TicketMove) {
+                                alpha = eval;
+                                bestMove = move;
+                            }
                         }
                         if (beta <= alpha)
                             break;
