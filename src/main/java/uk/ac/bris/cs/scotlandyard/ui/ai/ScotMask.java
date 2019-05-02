@@ -29,13 +29,15 @@ public class ScotMask implements ScotlandYardView{
      ScotMask (ScotlandYardView view){
         playersList = view.getPlayers();
         for(Colour player : playersList){
-            Player p;
+            Player p = mrX;
             if(player == BLACK) {
-                mrX = new Player(view.getPlayerLocation(BLACK).get(), makeCost(BLACK, view), BLACK);
+                if(view.getPlayerLocation(BLACK).isPresent())
+                    mrX = new Player(view.getPlayerLocation(BLACK).get(), makeCost(BLACK, view), BLACK);
                 p = mrX;
             }
             else {
-                p = new Player(view.getPlayerLocation(player).get(), makeCost(player, view), player);
+                if(view.getPlayerLocation(player).isPresent())
+                    p = new Player(view.getPlayerLocation(player).get(), makeCost(player, view), player);
                 detectives.add(p);
             }
             players.put(player, p);
@@ -107,11 +109,13 @@ public class ScotMask implements ScotlandYardView{
 
     private Cost makeCost(Colour colour, ScotlandYardView view){
 
+        if(view.getPlayerTickets(colour, Ticket.TAXI).isPresent() && view.getPlayerTickets(colour, Ticket.BUS).isPresent() && view.getPlayerTickets(colour, Ticket.UNDERGROUND).isPresent() && view.getPlayerTickets(colour, Ticket.SECRET).isPresent() && view.getPlayerTickets(colour, Ticket.DOUBLE).isPresent())
         return new Cost(view.getPlayerTickets(colour, Ticket.TAXI).get(),
                         view.getPlayerTickets(colour, Ticket.BUS).get(),
                         view.getPlayerTickets(colour, Ticket.UNDERGROUND).get(),
                         view.getPlayerTickets(colour, Ticket.SECRET).get(),
                         view.getPlayerTickets(colour, Ticket.DOUBLE).get());
+        return new Cost();
     }
 
     void setCurrentPlayer(boolean MrXTrns){

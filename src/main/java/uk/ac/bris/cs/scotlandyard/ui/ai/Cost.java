@@ -92,13 +92,6 @@ class Cost {
         ferry++;
         moves++;
     }
-    private void addSecret(){
-        secret++;
-        moves++;
-    }
-    private void addX2(){
-        x2++;
-    }
 
     int getScore(){
         return moves*1000 + taxi*2 + bus * 3 + underground * 6;
@@ -134,8 +127,8 @@ class Cost {
     int getUnderground(){
         return underground;
     }
-    int getSecret() { return secret; }
-    int getX2() { return x2; }
+    private int getSecret() { return secret; }
+    private int getX2() { return x2; }
 
     int getTicket(Ticket ticket){
         if(ticket == Ticket.TAXI) return getTaxi();

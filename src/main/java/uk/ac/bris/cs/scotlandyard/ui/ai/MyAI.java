@@ -34,27 +34,11 @@ public class MyAI implements PlayerFactory {
 
             ScotMask mask = new ScotMask(view);
             mask.setXLocation(location);
-            minimax(4,true, mask, Integer.MIN_VALUE, Integer.MAX_VALUE, moves, location);
+            minimax(24,true, mask, Integer.MIN_VALUE, Integer.MAX_VALUE, moves, location);
             callback.accept(bestMove);
 
         }
 
-        /*private Move getBestMove(Set<Move> moves, ScotlandYardView view) {
-            Move best = new PassMove(Colour.BLACK);
-            int bestScore = 0;
-            for (Move move : moves) {
-                ScotMask mask = new ScotMask(view);
-                if (move instanceof TicketMove) {
-                    mask.makeMove(move, Colour.BLACK);
-                    int score = new Score().getMrXscore(mask);
-                    if (score > bestScore) {
-                        bestScore = score;
-                        best = move;
-                    }
-                }
-            }
-            return best;
-        }*/
 
         private Move getDetectiveBestMove(Set<Move> moves, ScotlandYardView view, Colour detective, int Xloc) {
             Move best = new PassMove(detective);
@@ -87,6 +71,8 @@ public class MyAI implements PlayerFactory {
                     for (Move move : nextMovesfromNode) {
                         mask.makeMove(move, Colour.BLACK);
                         eval = minimax(depth - 1, false, mask, alpha, beta, null, mask.getMrX().getLocation());
+                        if(move instanceof TicketMove && ((TicketMove) move).ticket() == Ticket.SECRET)
+                            eval *= mask.getRoundsTo()/(mask.getRoundsSince()+1);
                         maxEval = Integer.max(maxEval, eval);
                         if (eval > alpha) {
                             if((move instanceof  DoubleMove && eval < 3300) || move instanceof TicketMove) {
