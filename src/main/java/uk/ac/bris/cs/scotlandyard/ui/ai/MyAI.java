@@ -34,7 +34,7 @@ public class MyAI implements PlayerFactory {
 
             ScotMask mask = new ScotMask(view);
             mask.setXLocation(location);
-            minimax(24,true, mask, Integer.MIN_VALUE, Integer.MAX_VALUE, moves, location);
+            minimax(5,true, mask, Integer.MIN_VALUE, Integer.MAX_VALUE, moves, location);
             callback.accept(bestMove);
 
         }

@@ -141,10 +141,10 @@ public class ScotMask implements ScotlandYardView{
         return graph;
     }
 
-    public int getRoundsSince(){
+    int getRoundsSince(){
         return roundsSince;
     }
-    public int getRoundsTo(){
+    int getRoundsTo(){
         return roundsTo;
     }
     public int getCurrentRound() {
